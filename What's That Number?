@@ -1,70 +1,109 @@
 import random
-#starting text
+
+# Define the game function
 def whats_that_number():
-    print ('''
-    Hey everybody! It\'s time to play the game we all love
+    print('''
+    Hey everybody! It\'s time to play the game we all love:
         WHAT'S
         THAT
         NUMBERRRRRRRR!
     Type "Cool" if you want to play.
-           ''')
-    #Sounds good?
+    ''')
+    # Game start prompt
+    start_game = input('Sounds good? ')
+    if start_game in ('Cool', 'cool', 'Cool.', 'cool.'):
+            print('''Cool!
+                  ''')
+    else:
+        print('''I\'m going to need you to type "Cool" if you want to start.
+              ''')
     while True:
-        start_game = input('Sounds good? ')
-        
-        #Cool
-        if start_game in ('Cool', 'cool', 'Cool.', 'cool.'):
-            print('''
-Cool indeed! Choose your difficulty.
- 
+
+        # Outer game loop for restarting
+        while True:
+            print('''You\'ve got 10 tries.
+
+Choose your difficulty:
+
 Easy is a number from 1 to 10
 Medium is a number from 1 to 50
 Hard is a number from 1 to 100
 ''')
-        #Not cool
-        else:
-            print('I\'m going to need you to type "Cool" if you want to start.')
-    
-    
-        difficulty = input('What difficulty do you want? ')
-        if difficulty in ('Easy',  'easy', 'Easy.', 'easy.'):
-            print ('''
-Easy? I guess you're not looking for a challenge. Oh well. Lemme pick a number from 1 to 10 for you.''')
-            the_number = random.randint(1,10)
-            break
-        elif difficulty in ('Medium','medium','Medium.','medium.'):
-            print ('''
-Medium is a little tricky! I think you can do it though. Lemme grab that number from 1 to 50 for you.''')
-            the_number = random.randint(1,50)
-            break
-        elif difficulty in ('Hard', 'hard', 'Hard.', 'hard.'):
-            print ('''
-Woah. Are you sure? It's going to be a number from 1 to 100 just so you know what you're getting into.''')
-            hard_confirmation = input('Yes or No. ')
-            if hard_confirmation in ('Yes', 'yes', 'Yes.', 'yes.'):
-                print('''
-You're wild for that one. Best of luck to you. I've got the number now.''')
-                the_number = random.randint(1,100)
-                break
-            if hard_confirmation in ('No', 'no', 'No.', 'no.'):
-                print('''
-Yeah, it's kind of a crazy ask. I don't blame you.
-                      ''')
-                return
-        
-    guess = 0
-    print('''Ha! I\'ve got a good one here for you. It\'s a good number. Let\'s see if you can guess it.
-''')
 
-    while True:
-        guess = int(input('What do you think the number is? ' ))
-        if guess < the_number:
-            print('''Too low! It\'s higher than that!
-                  ''')
-        if guess > the_number:
-            print('''Too high! It\'s lower than that!
+            # Difficulty selection
+            difficulty = input('What difficulty do you want? ')
+            if difficulty in ('Easy', 'easy', 'Easy.', 'easy.'):
+                print('''
+Easy? That's a bit boring but ok. Lemme pick a number between 1 and 10...''')
+                the_number = random.randint(1, 10)
+            elif difficulty in ('Medium', 'medium', 'Medium.', 'medium.'):
+                print('''
+Medium is a respectable choice! Good on you. Picking a number between 1 and 50...''')
+                the_number = random.randint(1, 50)
+            elif difficulty in ('Hard', 'hard', 'Hard.', 'hard.'):
+                print('''
+Woah. Are you sure? It's going to be a number from 1 to 100 just so you know what you're getting into. 
+                      ''')
+                hard_confirmation = input('Are you sure? Yes or No: ')
+                if hard_confirmation in ('Yes', 'yes', 'Yes.', 'yes.'):
+                    print('''
+You're wild for that one. Best of luck to you. I've got the number now.''')
+                    the_number = random.randint(1, 100)
+                else:
+                    print('''
+Yeah, it's kind of a crazy ask. I don't blame you. Backing out of Hard mode.
+                          ''')
+                    continue
+            else:
+                print('''
+That\'s not a difficulty. Please choose Easy, Medium, or Hard.''')
+                continue
+
+            # Start guessing
+            attempts = 0
+            while attempts < 10:
+                try:
+                    guess = int(input('What do you think the number is? '))
+                except ValueError:
+                    print('Please enter a valid number.')
+                    continue
+
+                attempts += 1
+                if guess < the_number:
+                    if attempts == 10:
+                        print('''
+Too low! That\'s all your tries! Better luck next time!
+                              ''')
+                        break
+                    print(f'''
+Too low! You have {10 - attempts} tries left.
+                    ''')
+                elif guess > the_number:
+                    if attempts == 10:
+                        print('''
+Too high! That\'s all your tries! Better luck next time!
 ''')
-        if guess == the_number:
-            print('Holy crap! You actually got it. Nice job!')
-            return
+                        break
+                    print(f'''
+Too high! You have {10 - attempts} tries left.
+                    ''')
+                else:
+                    print(f'''
+Holy crap! You actually got it in {attempts} tries. Nice job!
+                    ''')
+                    break
+
+            # Ask to play again
+            again = input('Would you like to play again? Yes or No: ')
+            if again in ('No', 'no', 'No.', 'no.'):
+                print('No problem. Play again sometime!')
+                return
+            elif again in ('Yes', 'yes', 'Yes.', 'yes.'):
+                print('Restarting the game!')
+                break
+            else:
+                print('Invalid input. Exiting game.')
+                return
+
+# Run the game
 whats_that_number()
